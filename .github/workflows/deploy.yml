@@ -1,5 +1,5 @@
 # 🚀 GitHub Pages 自动部署工作流
-# 触发条件：push 到 main 分支，且 commit message 包含 "build page"
+# 触发条件：push 到 main 分支，且 commit message 包含 "build-page"
 
 name: Deploy GitHub Pages Site
 
@@ -25,8 +25,8 @@ jobs:
   # ═══════════════════════════════════════════════════
   deploy-gh-pages:
     runs-on: ubuntu-latest
-    # 🔍 只有 commit message 包含 "build page" 才触发部署
-    if: "contains(github.event.head_commit.message, 'build page')"
+    # 🔍 只有 commit message 包含 "build-page" 才触发部署
+    if: "contains(github.event.head_commit.message, 'build-page')"
     steps:
       # 📥 拉取代码
       - name: Checkout code
