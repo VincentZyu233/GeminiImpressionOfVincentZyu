@@ -1,7 +1,7 @@
 {
   "name": "gemini-impression-of-vincentzyu",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "✨🌌 Gemini 对 VincentZyu 的交互式印象画卷 ⚡ 星光、代码与硅碳共鸣 🎨🚀",
   "type": "module",
   "scripts": {
