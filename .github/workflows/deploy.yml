@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - main
+    # 允许空 commit（--allow-empty）也能触发 workflow
+    paths: ['**']
 
 # 🔐 权限配置
 permissions:
