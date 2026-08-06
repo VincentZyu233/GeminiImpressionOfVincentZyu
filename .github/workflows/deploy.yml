@@ -7,8 +7,7 @@ on:
   push:
     branches:
       - main
-    # 允许空 commit（--allow-empty）也能触发 workflow
-    paths: ['**']
+  workflow_dispatch:
 
 # 🔐 权限配置
 permissions:
@@ -27,8 +26,8 @@ jobs:
   # ═══════════════════════════════════════════════════
   deploy-gh-pages:
     runs-on: ubuntu-latest
-    # 🔍 只有 commit message 包含 "build-page" 才触发部署
-    if: "contains(github.event.head_commit.message, 'build-page')"
+    # 🔍 只有 commit message 包含 "build-page" 才触发部署（workflow_dispatch 手动触发时无条件执行）
+    if: "github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'build-page')"
     steps:
       # 📥 拉取代码
       - name: Checkout code
