@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Sparkles, Compass } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Compass, Github } from 'lucide-react';
 import { audioSynthesizer } from '../utils/audioSynthesizer';
 
 export interface SectionDef {
@@ -52,6 +52,18 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
 
         {/* Action Controls Right */}
         <div className="navbar-actions">
+          <a
+            href="https://github.com/VincentZyu233/GeminiImpressionOfVincentZyu"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-github-link-btn"
+            title="访问 GitHub 源码仓库"
+            onClick={() => audioSynthesizer.playHover()}
+          >
+            <Github size={15} />
+            <span className="nav-github-text">GitHub</span>
+          </a>
+
           <button
             className="mute-toggle-btn"
             onClick={onToggleMute}

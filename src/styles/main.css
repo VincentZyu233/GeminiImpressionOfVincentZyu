@@ -135,6 +135,29 @@ html, body {
   gap: 0.6rem;
 }
 
+.nav-github-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  color: #e5e7eb;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-github-link-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
 .mute-toggle-btn {
   display: flex;
   align-items: center;
@@ -172,6 +195,58 @@ html, body {
 .nav-tp-quick-btn:hover {
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(139, 92, 246, 0.4));
   transform: translateY(-1px);
+}
+
+/* Corner Floating GitHub Widget (Bottom-Right) */
+.corner-github-widget {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 99;
+  animation: fadeIn 0.4s ease;
+}
+
+.corner-github-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(18, 20, 36, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 0.9rem;
+  border-radius: 9999px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.corner-github-pill:hover {
+  background: rgba(28, 32, 58, 0.95);
+  border-color: var(--accent-pink);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 36px rgba(236, 72, 153, 0.35);
+}
+
+.corner-github-icon {
+  color: #fff;
+}
+
+.corner-github-label {
+  font-weight: 600;
+}
+
+.corner-github-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  color: #fbbf24;
 }
 
 /* Main Content Container */

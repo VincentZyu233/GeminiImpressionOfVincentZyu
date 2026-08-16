@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Github, Star } from 'lucide-react';
 import { BackgroundCanvas } from './components/BackgroundCanvas';
 import { FloatingNav, type SectionDef } from './components/FloatingNav';
 import { HeroSection } from './components/sections/HeroSection';
@@ -84,6 +85,25 @@ export const App: React.FC = () => {
         <ResonanceSection />
         <TeleportSection />
       </main>
+
+      {/* Corner Floating GitHub Widget (Bottom-Right) */}
+      <aside className="corner-github-widget">
+        <a
+          href="https://github.com/VincentZyu233/GeminiImpressionOfVincentZyu"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="corner-github-pill"
+          title="前往 GitHub 查看项目源码与点 Star"
+          onClick={() => audioSynthesizer.playHover()}
+        >
+          <Github size={16} className="corner-github-icon" />
+          <span className="corner-github-label">GitHub</span>
+          <span className="corner-github-star">
+            <Star size={12} className="text-yellow-400 fill-yellow-400" />
+            <span>Star</span>
+          </span>
+        </a>
+      </aside>
     </div>
   );
 };
