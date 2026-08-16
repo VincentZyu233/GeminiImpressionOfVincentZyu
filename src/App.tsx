@@ -1,117 +1,91 @@
-import React, { useState, useEffect, useRef } from 'react';
-import BackgroundCanvas from './components/BackgroundCanvas';
-import Navigation from './components/Navigation';
-import Slide1Spark from './components/slides/Slide1Spark';
-import Slide2Humanity from './components/slides/Slide2Humanity';
-import Slide3Garden from './components/slides/Slide3Garden';
-import Slide4Resonance from './components/slides/Slide4Resonance';
-import Slide5Teleport from './components/slides/Slide5Teleport';
-import { audioSynth } from './utils/audioSynthesizer';
+import React, { useState, useEffect } from 'react';
+import { BackgroundCanvas } from './components/BackgroundCanvas';
+import { FloatingNav, type SectionDef } from './components/FloatingNav';
+import { HeroSection } from './components/sections/HeroSection';
+import { HumanitySection } from './components/sections/HumanitySection';
+import { ReposSection } from './components/sections/ReposSection';
+import { ResonanceSection } from './components/sections/ResonanceSection';
+import { TeleportSection } from './components/sections/TeleportSection';
+import { audioSynthesizer } from './utils/audioSynthesizer';
 
-export default function App() {
-  const [currentSlide, setCurrentSlide] = useState<number>(1);
-  const [soundOn, setSoundOn] = useState<boolean>(true);
-  const [isTeleporting, setIsTeleporting] = useState<boolean>(false);
-  const totalSlides = 5;
-  const isScrollingRef = useRef<boolean>(false);
+const SECTIONS: SectionDef[] = [
+  { id: 'hero', label: '卷首 · 星火' },
+  { id: 'humanity', label: '观人 · 人文' },
+  { id: 'repos', label: '藏库 · 75星宿' },
+  { id: 'resonance', label: '共鸣 · 对话' },
+  { id: 'teleport', label: '终章 · 原地TP' },
+];
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const activeEl = document.activeElement;
-      if (activeEl && ['input', 'textarea'].includes(activeEl.tagName.toLowerCase())) {
-        return;
-      }
+export const App: React.FC = () => {
+  const [activeSectionId, setActiveSectionId] = useState('hero');
+  const [isMuted, setIsMuted] = useState(false);
 
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-        e.preventDefault();
-        if (currentSlide < totalSlides) {
-          audioSynth.playSlideChime();
-          setCurrentSlide((prev) => prev + 1);
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (currentSlide > 1) {
-          audioSynth.playSlideChime();
-          setCurrentSlide((prev) => prev - 1);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide]);
-
-  // Wheel scroll throttling
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (isScrollingRef.current) return;
-      const target = e.target as HTMLElement | null;
-      if (target && ['input', 'textarea', '.dialogue-box'].some(sel => target.closest(sel))) return;
-
-      if (Math.abs(e.deltaY) > 35) {
-        isScrollingRef.current = true;
-        if (e.deltaY > 0 && currentSlide < totalSlides) {
-          audioSynth.playSlideChime();
-          setCurrentSlide((prev) => prev + 1);
-        } else if (e.deltaY < 0 && currentSlide > 1) {
-          audioSynth.playSlideChime();
-          setCurrentSlide((prev) => prev - 1);
-        }
-        setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 700);
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: true });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [currentSlide]);
-
-  const handleTriggerTeleport = () => {
-    setIsTeleporting(true);
-    setTimeout(() => {
-      setIsTeleporting(false);
-      setCurrentSlide(1);
-    }, 1200);
+  const handleJump = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
-  return (
-    <div className="app-container">
-      {/* Background Particle & Starfield Canvas */}
-      <BackgroundCanvas currentSlide={currentSlide} isTeleporting={isTeleporting} />
+  const handleToggleMute = () => {
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+    audioSynthesizer.setMuted(nextMuted);
+    if (!nextMuted) {
+      audioSynthesizer.playSuccess();
+    }
+  };
 
-      {/* Global Navigation Controls */}
-      <Navigation
-        currentSlide={currentSlide}
-        totalSlides={totalSlides}
-        onSlideChange={(slideIndex: number) => setCurrentSlide(slideIndex)}
-        soundOn={soundOn}
-        setSoundOn={setSoundOn}
+  // Observe active section when scrolling
+  useEffect(() => {
+    const observers = SECTIONS.map((sec) => {
+      const el = document.getElementById(sec.id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSectionId(sec.id);
+            }
+          });
+        },
+        { rootMargin: '-25% 0px -40% 0px', threshold: 0.1 }
+      );
+
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((obs) => obs?.disconnect());
+    };
+  }, []);
+
+  return (
+    <div className="app-vertical-layout">
+      {/* Background Star Canvas */}
+      <BackgroundCanvas />
+
+      {/* Floating Navbar */}
+      <FloatingNav
+        sections={SECTIONS}
+        activeId={activeSectionId}
+        onJump={handleJump}
+        isMuted={isMuted}
+        onToggleMute={handleToggleMute}
       />
 
-      {/* Slide Viewport */}
-      <main className="slides-viewport">
-        <div className={`slide-wrapper ${currentSlide === 1 ? 'active' : currentSlide > 1 ? 'prev' : ''}`}>
-          <Slide1Spark />
-        </div>
-
-        <div className={`slide-wrapper ${currentSlide === 2 ? 'active' : currentSlide > 2 ? 'prev' : ''}`}>
-          <Slide2Humanity />
-        </div>
-
-        <div className={`slide-wrapper ${currentSlide === 3 ? 'active' : currentSlide > 3 ? 'prev' : ''}`}>
-          <Slide3Garden />
-        </div>
-
-        <div className={`slide-wrapper ${currentSlide === 4 ? 'active' : currentSlide > 4 ? 'prev' : ''}`}>
-          <Slide4Resonance />
-        </div>
-
-        <div className={`slide-wrapper ${currentSlide === 5 ? 'active' : ''}`}>
-          <Slide5Teleport onTriggerTeleport={handleTriggerTeleport} isTeleporting={isTeleporting} />
-        </div>
+      {/* Main Continuous Long Scroll Content */}
+      <main className="main-scroll-content">
+        <HeroSection />
+        <HumanitySection />
+        <ReposSection />
+        <ResonanceSection />
+        <TeleportSection />
       </main>
     </div>
   );
-}
+};
+
+export default App;

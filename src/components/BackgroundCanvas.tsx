@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
-interface BackgroundCanvasProps {
-  currentSlide: number;
-  isTeleporting: boolean;
+export interface BackgroundCanvasProps {
+  currentSlide?: number;
+  isTeleporting?: boolean;
 }
 
 interface Particle {
@@ -15,7 +15,9 @@ interface Particle {
   color: string;
 }
 
-export default function BackgroundCanvas({ isTeleporting }: BackgroundCanvasProps) {
+export const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
+  isTeleporting = false,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -35,43 +37,39 @@ export default function BackgroundCanvas({ isTeleporting }: BackgroundCanvasProp
     };
     window.addEventListener('resize', handleResize);
 
-    const numParticles = 90;
+    const numParticles = 80;
+    const colors = ['#f472b6', '#a78bfa', '#38bdf8', '#fbbf24', '#ffffff'];
     const particles: Particle[] = Array.from({ length: numParticles }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      size: Math.random() * 2 + 1,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 2 + 0.8,
       alpha: Math.random() * 0.6 + 0.2,
-      color: Math.random() > 0.5 ? '#ff69b4' : '#64b5f6'
+      color: colors[Math.floor(Math.random() * colors.length)],
     }));
-
-    let mouse = { x: width / 2, y: height / 2 };
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      const grad = ctx.createRadialGradient(
-        mouse.x, mouse.y, 50,
-        width / 2, height / 2, Math.max(width, height)
+      // Deep space subtle gradient
+      const bgGrad = ctx.createRadialGradient(
+        width / 2,
+        height / 2,
+        50,
+        width / 2,
+        height / 2,
+        Math.max(width, height) * 0.8
       );
-      grad.addColorStop(0, 'rgba(25, 35, 60, 0.4)');
-      grad.addColorStop(0.5, 'rgba(10, 14, 23, 0.8)');
-      grad.addColorStop(1, 'rgba(7, 9, 14, 1)');
-      ctx.fillStyle = grad;
+      bgGrad.addColorStop(0, 'rgba(18, 20, 38, 0.4)');
+      bgGrad.addColorStop(1, 'rgba(8, 9, 20, 0.95)');
+      ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, width, height);
 
-      const speedMultiplier = isTeleporting ? 15 : 1;
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.x += p.vx * speedMultiplier;
-        p.y += p.vy * speedMultiplier;
+      // Render and connect particles
+      particles.forEach((p, idx) => {
+        p.x += isTeleporting ? p.vx * 6 : p.vx;
+        p.y += isTeleporting ? p.vy * 6 : p.vy;
 
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
@@ -79,30 +77,26 @@ export default function BackgroundCanvas({ isTeleporting }: BackgroundCanvasProp
         if (p.y > height) p.y = 0;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * (isTeleporting ? 2.5 : 1), 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, isTeleporting ? p.size * 2 : p.size, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.alpha;
         ctx.fill();
 
-        if (!isTeleporting) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const dx = p.x - p2.x;
-            const dy = p.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 120) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = p.color;
-              ctx.globalAlpha = (1 - dist / 120) * 0.15;
-              ctx.lineWidth = 0.8;
-              ctx.stroke();
-            }
+        // Connect nearby particles with subtle lines
+        for (let j = idx + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = '#a78bfa';
+            ctx.globalAlpha = (1 - dist / 110) * 0.12;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
           }
         }
-      }
+      });
 
       ctx.globalAlpha = 1;
       animationFrameId = requestAnimationFrame(render);
@@ -112,10 +106,11 @@ export default function BackgroundCanvas({ isTeleporting }: BackgroundCanvasProp
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, [isTeleporting]);
 
-  return <canvas ref={canvasRef} className="bg-canvas" />;
-}
+  return <canvas ref={canvasRef} className="background-canvas" />;
+};
+
+export default BackgroundCanvas;

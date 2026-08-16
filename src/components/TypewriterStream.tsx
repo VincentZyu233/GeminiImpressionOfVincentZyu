@@ -1,27 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, FastForward, CheckCircle2, ChevronUp } from 'lucide-react';
-import { audioSynth } from '../utils/audioSynthesizer';
+import { Sparkles, Zap, ChevronUp } from 'lucide-react';
+import { audioSynthesizer } from '../utils/audioSynthesizer';
 
-interface TypewriterStreamProps {
-  fullText: string;
+export interface TypewriterStreamProps {
+  text?: string;
+  fullText?: string;
+  charDelay?: number;
   speed?: number;
+  step?: number;
+  title?: string;
   triggerLabel?: string;
   onComplete?: () => void;
   className?: string;
 }
 
-export default function TypewriterStream({
-  fullText,
-  speed = 15,
-  triggerLabel = "✨ 开启 Agent 深度流式解析 (点击展开 600+ 字)",
+export const TypewriterStream: React.FC<TypewriterStreamProps> = ({
+  text,
+  fullText: fullTextProp,
+  charDelay,
+  speed,
+  step = 3,
+  title,
+  triggerLabel,
   onComplete,
-  className = ''
-}: TypewriterStreamProps) {
+  className = '',
+}) => {
+  const content = text || fullTextProp || '';
+  const btnLabel = title || triggerLabel || '✨ 开启 Gemini 深度解析 (点击流式展开)';
+  const intervalTime = charDelay || speed || 15;
+
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [displayedText, setDisplayedText] = useState<string>('');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const indexRef = useRef<number>(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     setIsExpanded(false);
@@ -29,99 +41,110 @@ export default function TypewriterStream({
     setIsCompleted(false);
     indexRef.current = 0;
     if (timerRef.current) clearInterval(timerRef.current);
-  }, [fullText]);
+  }, [content]);
 
   const startStreaming = () => {
     setIsExpanded(true);
     setDisplayedText('');
     setIsCompleted(false);
     indexRef.current = 0;
-    audioSynth.playTone(850, 'triangle', 0.1, 0.05);
+    audioSynthesizer.playOpen();
 
     if (timerRef.current) clearInterval(timerRef.current);
 
     timerRef.current = setInterval(() => {
-      if (indexRef.current < fullText.length) {
-        const char = fullText.charAt(indexRef.current);
-        setDisplayedText((prev) => prev + char);
-        
-        if (indexRef.current % 4 === 0) {
-          audioSynth.playTone(750 + (indexRef.current % 30) * 10, 'sine', 0.03, 0.02);
-        }
-        
-        indexRef.current++;
-      } else {
-        if (timerRef.current) clearInterval(timerRef.current);
+      indexRef.current += step;
+      if (indexRef.current >= content.length) {
+        setDisplayedText(content);
         setIsCompleted(true);
+        if (timerRef.current) clearInterval(timerRef.current);
+        audioSynthesizer.playSuccess();
         if (onComplete) onComplete();
+      } else {
+        setDisplayedText(content.slice(0, indexRef.current));
+        if (indexRef.current % 9 === 0) {
+          audioSynthesizer.playTypeTick();
+        }
       }
-    }, speed);
+    }, intervalTime);
   };
 
-  const handleSkip = () => {
+  const instantComplete = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    setDisplayedText(fullText);
+    setDisplayedText(content);
     setIsCompleted(true);
-    audioSynth.playTone(950, 'sine', 0.08, 0.05);
+    audioSynthesizer.playSuccess();
     if (onComplete) onComplete();
   };
 
-  const handleCollapse = () => {
+  const collapse = () => {
     if (timerRef.current) clearInterval(timerRef.current);
     setIsExpanded(false);
-    setDisplayedText('');
     setIsCompleted(false);
-    audioSynth.playTone(600, 'sine', 0.05, 0.03);
+    audioSynthesizer.playHover();
   };
 
-  if (!isExpanded) {
-    return (
-      <div className={`stream-trigger-wrapper ${className}`} style={{ margin: '0.8rem 0' }}>
-        <button
-          className="stream-start-btn"
-          onClick={startStreaming}
-          onMouseEnter={() => audioSynth.playHoverPop()}
-        >
-          <Sparkles size={16} color="#ff69b4" />
-          <span>{triggerLabel}</span>
-        </button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
 
   return (
-    <div className={`typewriter-stream-container expanded ${className}`}>
-      <div className="stream-header-bar">
-        <div className="stream-status">
-          <span className={`status-dot ${isCompleted ? 'done' : 'streaming'}`} />
-          <span className="status-label">
-            {isCompleted ? 'STREAM COMPLETE' : 'GENERATING RESPONSE STREAM...'}
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
-          {!isCompleted && (
-            <button className="skip-stream-btn wide-skip-btn" onClick={handleSkip} title="点击直接显示全文">
-              <FastForward size={14} /> ⚡ 瞬间全显
-            </button>
-          )}
-
-          {isCompleted && (
-            <span className="complete-tag">
-              <CheckCircle2 size={14} color="#64b5f6" /> 沉浸完毕
-            </span>
-          )}
-
-          <button className="skip-stream-btn narrow-collapse-btn" onClick={handleCollapse} title="收起面板">
-            <ChevronUp size={13} /> 收起
+    <div className={`typewriter-stream-container ${className}`}>
+      {!isExpanded ? (
+        <div className="stream-collapsed-trigger">
+          <button
+            className="stream-start-btn"
+            onClick={startStreaming}
+            onMouseEnter={() => audioSynthesizer.playHover()}
+          >
+            <Sparkles size={16} />
+            <span>{btnLabel}</span>
           </button>
         </div>
-      </div>
+      ) : (
+        <div className="stream-expanded-box">
+          <div className="stream-header-actions">
+            <span className="stream-title-text">
+              ✨ Gemini 深度思维流
+            </span>
 
-      <div className="stream-text-content">
-        {displayedText}
-        {!isCompleted && <span className="streaming-cursor">▋</span>}
-      </div>
+            <div className="stream-actions-group">
+              {!isCompleted ? (
+                <button
+                  className="stream-ctrl-btn wide-skip-btn"
+                  onClick={instantComplete}
+                  title="瞬间全显全部文案"
+                >
+                  <Zap size={13} />
+                  <span>⚡ 瞬间全显</span>
+                </button>
+              ) : (
+                <span className="stream-badge-done">
+                  ✨ 流式输出完毕
+                </span>
+              )}
+
+              <button
+                className="stream-ctrl-btn narrow-collapse-btn"
+                onClick={collapse}
+                title="收起文案"
+              >
+                <ChevronUp size={14} />
+                <span>▲ 收起</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="stream-text-content">
+            {displayedText}
+            {!isCompleted && <span className="stream-cursor-pulse">▋</span>}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default TypewriterStream;

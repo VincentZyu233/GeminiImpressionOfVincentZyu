@@ -41,13 +41,22 @@ class AudioSynthesizer {
     }
   }
 
+  public setMuted(muted: boolean): void {
+    this.enabled = !muted;
+  }
+
   public toggleSound(): boolean {
     this.enabled = !this.enabled;
     if (this.enabled) this.playTone(523.25, 'sine', 0.1, 0.15);
     return this.enabled;
   }
 
-  public playTone(freq: number = 440, type: OscillatorType = 'sine', duration: number = 0.15, gainVal: number = 0.1): void {
+  public playTone(
+    freq: number = 440,
+    type: OscillatorType = 'sine',
+    duration: number = 0.15,
+    gainVal: number = 0.1
+  ): void {
     if (!this.enabled || !this.userInteracted) return;
     this.init();
     if (!this.ctx || this.ctx.state !== 'running') return;
@@ -72,19 +81,30 @@ class AudioSynthesizer {
     }
   }
 
-  public playSlideChime(): void {
+  public playTypeTick(): void {
     if (!this.enabled || !this.userInteracted) return;
-    this.playTone(440, 'sine', 0.1, 0.08);
-    setTimeout(() => this.playTone(659.25, 'sine', 0.15, 0.08), 80);
-    setTimeout(() => this.playTone(880, 'sine', 0.2, 0.06), 160);
+    this.playTone(800 + Math.random() * 200, 'triangle', 0.03, 0.02);
   }
 
-  public playHoverPop(): void {
+  public playHover(): void {
     if (!this.enabled || !this.userInteracted) return;
-    this.playTone(587.33, 'triangle', 0.05, 0.04);
+    this.playTone(587.33, 'sine', 0.04, 0.03);
   }
 
-  public playWarpSound(): void {
+  public playOpen(): void {
+    if (!this.enabled || !this.userInteracted) return;
+    this.playTone(440, 'sine', 0.08, 0.05);
+    setTimeout(() => this.playTone(659.25, 'sine', 0.12, 0.05), 60);
+  }
+
+  public playSuccess(): void {
+    if (!this.enabled || !this.userInteracted) return;
+    this.playTone(523.25, 'sine', 0.08, 0.05);
+    setTimeout(() => this.playTone(659.25, 'sine', 0.08, 0.05), 70);
+    setTimeout(() => this.playTone(1046.5, 'sine', 0.16, 0.05), 140);
+  }
+
+  public playWarp(): void {
     if (!this.enabled || !this.userInteracted) return;
     this.init();
     if (!this.ctx || this.ctx.state !== 'running') return;
@@ -95,20 +115,21 @@ class AudioSynthesizer {
 
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.8);
+      osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.6);
 
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
+      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.8);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
       osc.start();
-      osc.stop(this.ctx.currentTime + 1.2);
+      osc.stop(this.ctx.currentTime + 0.8);
     } catch {
       // Silently ignore audio playback error
     }
   }
 }
 
-export const audioSynth = new AudioSynthesizer();
+export const audioSynthesizer = new AudioSynthesizer();
+export const audioSynth = audioSynthesizer;
