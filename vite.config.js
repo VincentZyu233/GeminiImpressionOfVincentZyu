@@ -7,6 +7,9 @@ export default defineConfig({
   server: {
     port: 40805,
     host: true,
-    open: false
+    open: false,
+    watch: {
+      ignored: ['**/temp/**', '**/.git/**']
+    }
   }
 });
