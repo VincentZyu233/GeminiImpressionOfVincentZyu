@@ -91,16 +91,19 @@ html, body {
   text-shadow: 0 0 12px rgba(244, 114, 182, 0.4);
 }
 
+/* :40805 Uses LXGW WenKai font now */
 .brand-port-badge {
-  font-size: 0.78rem;
-  font-family: monospace !important;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #f472b6;
   background: rgba(236, 72, 153, 0.25);
   border: 1px solid rgba(236, 72, 153, 0.6);
-  padding: 0.15rem 0.5rem;
+  padding: 0.12rem 0.55rem;
   border-radius: 9999px;
   letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
 }
 
 .navbar-links {
@@ -141,8 +144,9 @@ html, body {
 }
 
 .nav-github-link-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -155,6 +159,7 @@ html, body {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .nav-github-link-btn:hover {
@@ -164,8 +169,9 @@ html, body {
 }
 
 .mute-toggle-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -175,6 +181,7 @@ html, body {
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .mute-toggle-btn:hover {
@@ -183,8 +190,9 @@ html, body {
 }
 
 .nav-tp-quick-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.35), rgba(139, 92, 246, 0.35));
   border: 1px solid rgba(236, 72, 153, 0.7);
@@ -196,6 +204,7 @@ html, body {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .nav-tp-quick-btn:hover {
@@ -213,7 +222,7 @@ html, body {
 }
 
 .corner-github-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   background: #181d34;
@@ -226,6 +235,7 @@ html, body {
   font-weight: 600;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 16px rgba(236, 72, 153, 0.25);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
 }
 
 .corner-github-pill:hover {
@@ -284,6 +294,7 @@ html, body {
   font-weight: 600;
   margin-bottom: 1.4rem;
   box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
+  line-height: 1;
 }
 
 .section-heading {
@@ -340,7 +351,7 @@ html, body {
 }
 
 .hero-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   background: #181d34;
@@ -350,6 +361,7 @@ html, body {
   font-size: 0.88rem;
   color: #ffffff;
   font-weight: 500;
+  line-height: 1;
 }
 
 .hero-grid-cards {
@@ -387,6 +399,7 @@ html, body {
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
   margin-bottom: 0.75rem;
+  line-height: 1.2;
 }
 
 .badge-title {
@@ -409,6 +422,7 @@ html, body {
 .hero-primary-cta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   background: linear-gradient(135deg, #ec4899, #8b5cf6);
   color: #ffffff;
@@ -420,6 +434,7 @@ html, body {
   cursor: pointer;
   box-shadow: 0 6px 28px rgba(236, 72, 153, 0.5);
   transition: all 0.25s ease;
+  line-height: 1;
 }
 
 .hero-primary-cta:hover {
@@ -521,6 +536,7 @@ html, body {
   font-size: 1.5rem;
   font-weight: 800;
   color: #ffffff;
+  line-height: 1.2;
 }
 
 .stat-label {
@@ -631,6 +647,7 @@ html, body {
   border-radius: 9999px;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .cat-tab-btn:hover {
@@ -749,6 +766,7 @@ html, body {
   gap: 0.35rem;
   word-break: break-all;
   transition: color 0.2s ease;
+  line-height: 1.3;
 }
 
 .repo-name:hover {
@@ -762,14 +780,14 @@ html, body {
 }
 
 .fork-badge {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 700;
   background: rgba(251, 191, 36, 0.2);
   border: 1px solid rgba(251, 191, 36, 0.5);
   color: #fbbf24;
-  padding: 0.12rem 0.4rem;
+  padding: 0.12rem 0.45rem;
   border-radius: 4px;
-  font-family: monospace !important;
+  line-height: 1;
 }
 
 .repo-badges {
@@ -790,6 +808,7 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.18rem 0.55rem;
   border-radius: 9999px;
+  line-height: 1;
 }
 
 .lang-dot {
@@ -809,6 +828,7 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0.18rem 0.55rem;
   border-radius: 9999px;
+  line-height: 1;
 }
 
 .stat-issue {
@@ -836,6 +856,7 @@ html, body {
 .repo-expand-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(168, 85, 247, 0.3));
   border: 1px solid #ec4899;
@@ -848,6 +869,7 @@ html, body {
   box-shadow: 0 0 12px rgba(236, 72, 153, 0.25);
   transition: all 0.2s ease;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .repo-expand-btn:hover {
@@ -936,6 +958,7 @@ html, body {
 .modal-github-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -947,6 +970,7 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .modal-github-btn:hover {
@@ -961,7 +985,7 @@ html, body {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -1006,35 +1030,68 @@ html, body {
   white-space: pre-wrap;
 }
 
-/* Stream Controls */
+/* Stream Controls & Buttons */
 .stream-ctrl-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  line-height: 1;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.btn-icon-flex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-text-flex {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .wide-skip-btn {
   background: rgba(236, 72, 153, 0.3);
   border: 1px solid #f472b6;
   color: #ffffff;
-  padding: 0.4rem 0.95rem;
+  padding: 0 0.9rem;
   box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
 }
 
 .wide-skip-btn:hover {
-  background: rgba(236, 72, 153, 0.5);
+  background: rgba(236, 72, 153, 0.55);
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.5);
+}
+
+.narrow-collapse-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  padding: 0 0.8rem;
+}
+
+.narrow-collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .stream-badge-done {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #c084fc;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .stream-cursor-pulse {
@@ -1060,6 +1117,7 @@ html, body {
 .stream-start-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.35), rgba(139, 92, 246, 0.35));
   border: 1px solid #f472b6;
@@ -1072,6 +1130,7 @@ html, body {
   box-shadow: 0 0 20px rgba(236, 72, 153, 0.35);
   transition: all 0.25s ease;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .stream-start-btn:hover {
@@ -1102,25 +1161,15 @@ html, body {
   font-size: 1.05rem;
   font-weight: 800;
   color: #f472b6;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .stream-actions-group {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-}
-
-.narrow-collapse-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  padding: 0.4rem 0.7rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.narrow-collapse-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
 }
 
 .stream-text-content {
@@ -1175,8 +1224,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.82rem;
-  font-family: monospace !important;
+  font-size: 0.85rem;
   color: #cbd5e1;
   font-weight: 600;
 }
@@ -1198,8 +1246,7 @@ html, body {
 }
 
 .chat-sender-label {
-  font-size: 0.78rem;
-  font-family: monospace !important;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #94a3b8;
 }
@@ -1275,6 +1322,7 @@ html, body {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .terminal-send-btn:disabled {
@@ -1305,6 +1353,7 @@ html, body {
   cursor: pointer;
   box-shadow: 0 8px 36px rgba(236, 72, 153, 0.6);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
 }
 
 .big-teleport-btn:hover {
@@ -1404,6 +1453,7 @@ html, body {
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .footer-github-btn:hover {

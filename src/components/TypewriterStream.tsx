@@ -99,8 +99,8 @@ export const TypewriterStream: React.FC<TypewriterStreamProps> = ({
             onClick={startStreaming}
             onMouseEnter={() => audioSynthesizer.playHover()}
           >
-            <Sparkles size={16} />
-            <span>{btnLabel}</span>
+            <Sparkles size={16} className="btn-icon-flex" />
+            <span className="btn-text-flex">{btnLabel}</span>
           </button>
         </div>
       ) : (
@@ -117,8 +117,8 @@ export const TypewriterStream: React.FC<TypewriterStreamProps> = ({
                   onClick={instantComplete}
                   title="瞬间全显全部文案"
                 >
-                  <Zap size={13} />
-                  <span>⚡ 瞬间全显</span>
+                  <Zap size={14} className="btn-icon-flex" />
+                  <span className="btn-text-flex">瞬间全显</span>
                 </button>
               ) : (
                 <span className="stream-badge-done">
@@ -131,8 +131,8 @@ export const TypewriterStream: React.FC<TypewriterStreamProps> = ({
                 onClick={collapse}
                 title="收起文案"
               >
-                <ChevronUp size={14} />
-                <span>▲ 收起</span>
+                <ChevronUp size={15} className="btn-icon-flex" />
+                <span className="btn-text-flex">收起</span>
               </button>
             </div>
           </div>
