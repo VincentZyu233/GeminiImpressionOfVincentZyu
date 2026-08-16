@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Sparkles, Filter, ArrowUpDown, Layers, Star, GitFork, BookOpen } from 'lucide-react';
-import { REPO_GROUPS, TOTAL_REPOS_COUNT, TOTAL_STARS_COUNT, TOTAL_FORKS_COUNT } from '../../data/reposData';
+import { REPO_GROUPS, TOTAL_REPOS_COUNT, TOTAL_STARS_COUNT, TOTAL_FORKS_COUNT, type RepoItem } from '../../data/reposData';
 import { RepoCard } from '../RepoCard';
+import { RepoDetailModal } from '../RepoDetailModal';
 import { audioSynthesizer } from '../../utils/audioSynthesizer';
 
 type SortOption = 'stars-desc' | 'forks-desc' | 'name-asc';
@@ -10,6 +11,7 @@ export const ReposSection: React.FC = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortBy, setSortBy] = useState<SortOption>('stars-desc');
+  const [activeDetailRepo, setActiveDetailRepo] = useState<RepoItem | null>(null);
 
   // Filter and sort repositories
   const filteredGroups = useMemo(() => {
@@ -62,7 +64,7 @@ export const ReposSection: React.FC = () => {
       </h2>
 
       <p className="section-subtitle">
-        跨越 18 门语言、6 大领域集群。每一个仓库都配备 Gemini 深度工程解构与极客浪漫评述。
+        跨越 18 门语言、6 大领域集群。点击任意仓库即可开启专属的 Gemini 悬浮深度解构视窗。
       </p>
 
       {/* Stats Counter Banner */}
@@ -76,7 +78,7 @@ export const ReposSection: React.FC = () => {
         </div>
 
         <div className="stat-stat-item">
-          <Star className="text-yellow-400" size={20} />
+          <Star className="text-yellow-400 fill-yellow-400" size={20} />
           <div className="stat-stat-info">
             <span className="stat-number">{TOTAL_STARS_COUNT}</span>
             <span className="stat-label">累计 Star</span>
@@ -193,13 +195,23 @@ export const ReposSection: React.FC = () => {
               {/* Repos Grid */}
               <div className="repo-grid">
                 {group.repos.map((repo) => (
-                  <RepoCard key={repo.name} repo={repo} />
+                  <RepoCard
+                    key={repo.name}
+                    repo={repo}
+                    onOpenDetail={setActiveDetailRepo}
+                  />
                 ))}
               </div>
             </div>
           ))
         )}
       </div>
+
+      {/* Floating Detail Modal Window */}
+      <RepoDetailModal
+        repo={activeDetailRepo}
+        onClose={() => setActiveDetailRepo(null)}
+      />
     </section>
   );
 };
