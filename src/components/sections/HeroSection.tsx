@@ -61,7 +61,7 @@ export const HeroSection: React.FC = () => {
         text={data.deepNarrative}
         charDelay={12}
         step={3}
-        title="✨ 开启 Gemini 序章宏观解析 (600+ 字)"
+        title="✨ 开启 Gemini 序章宏观解析 (800+ 字)"
       />
 
       {/* Jump to 75 repos CTA */}

@@ -44,7 +44,7 @@ export const HumanitySection: React.FC = () => {
         text={data.deepNarrative}
         charDelay={12}
         step={3}
-        title="✨ 开启 Gemini 人文哲学解析 (700+ 字)"
+        title="✨ 开启 Gemini 人文哲学解析 (900+ 字)"
       />
     </section>
   );
